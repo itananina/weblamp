@@ -14,9 +14,9 @@
                 <td>{{p.title}}</td>
                 <td>{{p.price}}</td>
                 <td>
-                    <button class="btn btn-primary" ng-click="addToCart(p.id)">+</button>
+                    <button class="btn btn-primary" ng-click="addToCart(p.id)" data-ng-disabled="!isUserLoggedIn()">+</button>
                     <span>В корзину</span>
-                    <button class="btn btn-danger" ng-click="removeFromCart(p.id)">-</button>
+                    <button class="btn btn-danger" ng-click="removeFromCart(p.id)" data-ng-disabled="!isUserLoggedIn()">-</button>
                 </td>
             </tr>
             </tbody>

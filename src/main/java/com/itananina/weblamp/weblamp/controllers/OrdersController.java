@@ -6,6 +6,8 @@ import com.itananina.weblamp.weblamp.services.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+
 @RestController
 @RequestMapping("api/v1/orders")
 @RequiredArgsConstructor
@@ -14,13 +16,13 @@ public class OrdersController {
     private final DtoConverter converter;
 
     @GetMapping
-    public OrderDto showOrder() {
-        return converter.entityToDto(orderService.getCurrentOrder(3L));
+    public OrderDto showOrder(Principal principal) {
+        return converter.entityToDto(orderService.getCurrentOrder(principal.getName()));
     }
 
     @PutMapping("/items/{id}")
-    public OrderDto addProduct(@PathVariable Long id) {
-        return converter.entityToDto(orderService.addProduct(3L,id));
+    public OrderDto addProduct(@PathVariable Long id, Principal principal) {
+        return converter.entityToDto(orderService.addProduct(principal.getName(),id));
     }
 
 //    @DeleteMapping("/items/{id}")

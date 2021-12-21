@@ -23,6 +23,7 @@ angular.module('weblamp').controller('catalogController', function ($scope, $roo
         $http.put(contextPath + '/api/v1/orders/items/' + productId)
             .then(function (response) {
                 $rootScope.orderCount = response.data.count;
+                $rootScope.$broadcast('orderCount', $rootScope.orderCount);
                 $scope.isOrderEmpty = response.data.productList.length > 0 ? false : true;
             });
     }
@@ -31,6 +32,7 @@ angular.module('weblamp').controller('catalogController', function ($scope, $roo
         $http.delete(contextPath + '/api/v1/orders/items/' + productId)
            .then(function (response) {
                 $rootScope.orderCount = response.data.count;
+                $rootScope.$broadcast('orderCount', $rootScope.orderCount);
                 $scope.isOrderEmpty = response.data.productList.length > 0 ? false : true;
             });
     }

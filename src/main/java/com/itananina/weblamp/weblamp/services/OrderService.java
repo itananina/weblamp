@@ -22,27 +22,24 @@ public class OrderService {
     private final OrderProductRepository orderProductRepository;
 
     @Transactional
-    public Order addProduct(Long userId, Long productId) {
-        Order order = getCurrentOrder(userId);
-        log.info("reached 3");
+    public Order addProduct(String username, Long productId) {
+        Order order = getCurrentOrder(username);
         OrderProduct orderedProduct = order.getOrderProducts().stream()
                 .filter(op->op.getProduct().getId().equals(productId))
                 .findFirst()
                 .orElseGet(()->orderProductRepository.save(new OrderProduct(productService.findById(productId),order)));
         orderedProduct.setAmount(orderedProduct.getAmount()==null ? 1 : orderedProduct.getAmount()+1);
-        log.info("reached 4");
         return order;
     }
 
-    public Order getCurrentOrder(Long userId) {
-        log.info("reached 1");
-        User user = userService.findById(userId).orElseThrow(()->new ResourceNotFoundException("User not found by id: "+userId));
-        Order order = orderRepository.findByUserIdAndStatus(userId,"В процессе")
+    public Order getCurrentOrder(String username) {
+
+        User user = userService.findByUsername(username).orElseThrow(()->new ResourceNotFoundException("User not found by username: "+username));
+        Order order = orderRepository.findByUserIdAndStatus(user.getId(),"В процессе")
                 .orElseGet(()-> {
                     log.info("reached 5");
                     return orderRepository.save(new Order("В процессе",user));
                 });
-        log.info("reached 2");
         return order;
     }
 
