@@ -1,0 +1,26 @@
+<div>
+    <h3>Корзина</h3>
+    <div style="display: inline-block; width:80%">
+        <table class="table table-hover" cellpadding="0" cellspacing="0">
+            <tr>
+                <td>Продукт</td>
+                <td>Цена</td>
+                <td>&nbsp</td>
+            </tr>
+            <tbody>
+            <tr ng-repeat="p in OrderedList">
+                <td>{{p.title}}</td>
+                <td>{{p.price}}</td>
+                <td>{{p.amount > 1 ? 'x'+ p.amount : ''}}</td>
+            </tr>
+            </tbody>
+        </table>
+        <button class="btn btn-danger" ng-click="removeAllFromCart()" data-ng-disabled="isOrderEmpty">Очистить корзину</button>
+    </div>
+
+    <div style="float: right">
+        <h5>Итого:</h5>
+        <h4>{{total+' руб.'}}</h4>
+    </div>
+
+</div>

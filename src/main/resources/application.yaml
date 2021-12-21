@@ -1,0 +1,19 @@
+server:
+  port: 8192
+  servlet:
+    context-path: /weblamp
+    session:
+      timeout: 60s
+spring:
+  jpa:
+    show-sql: true
+    hibernate:
+      dialect: org.sqlite.hibernate.dialect.SQLiteDialect
+      ddl-auto: none
+      temp:
+        use_jdbc_metadata_defaults: false
+  datasource:
+    driver-class-name: org.sqlite.JDBC
+    url: jdbc:sqlite:products.db
+    username:
+    password:

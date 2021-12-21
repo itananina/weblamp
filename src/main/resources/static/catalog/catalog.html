@@ -1,0 +1,41 @@
+<div>
+    <div style="display: inline-block; width:80%">
+        <h3>Продукты</h3>
+        <table class="table table-hover" cellpadding="0" cellspacing="0">
+            <tr>
+                <td>ID</td>
+                <td>Продукт</td>
+                <td>Цена</td>
+                <td>&nbsp</td>
+            </tr>
+            <tbody>
+            <tr ng-repeat="p in ProductList">
+                <td>{{p.id}}</td>
+                <td>{{p.title}}</td>
+                <td>{{p.price}}</td>
+                <td>
+                    <button class="btn btn-primary" ng-click="addToCart(p.id)">+</button>
+                    <span>В корзину</span>
+                    <button class="btn btn-danger" ng-click="removeFromCart(p.id)">-</button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <p align="center">
+            <button class="btn btn-primary" data-ng-disabled="isFirstPage" ng-click="loadProducts(currentPage)"><</button>
+            <span>{{currentPage+1}}</span>
+            <button class="btn btn-primary" data-ng-disabled="isLastPage" ng-click="loadProducts(currentPage+2)">></button>
+        </p>
+    </div>
+
+    <div style="float: right">
+        <h3>Фильтр</h3>
+        <form novalidate ng-submit="loadProducts(currentPage+1)">
+            <input class="form-control" type="number" placeholder="Мин" ng-model="newFilter.minPrice"><br>
+            <input class="form-control" type="number" placeholder="Макс" ng-model="newFilter.maxPrice"><br>
+            <input class="form-control" type="text" placeholder="Название" ng-model="newFilter.titlePart"><br>
+            <button type="submit" class="btn btn-primary">Применить</button><br><br>
+        </form>
+    </div>
+</div>
