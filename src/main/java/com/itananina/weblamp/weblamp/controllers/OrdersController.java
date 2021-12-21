@@ -17,21 +17,21 @@ public class OrdersController {
 
     @GetMapping
     public OrderDto showOrder(Principal principal) {
-        return converter.entityToDto(orderService.getCurrentOrder(principal.getName()));
+        return converter.productToProductDto(orderService.getCurrentOrder(principal.getName()));
     }
 
     @PutMapping("/items/{id}")
     public OrderDto addProduct(@PathVariable Long id, Principal principal) {
-        return converter.entityToDto(orderService.addProduct(principal.getName(),id));
+        return converter.productToProductDto(orderService.addProduct(principal.getName(),id));
     }
 
-//    @DeleteMapping("/items/{id}")
-//    public OrderDto removeProduct(@PathVariable Long id) {
-//        return orderConverter.entityToDto(orderService.removeProduct(id));
-//    }
-//
-//    @DeleteMapping("/items/")
-//    public OrderDto removeAllProducts() {
-//        return orderConverter.entityToDto(orderService.removeAll());
-//    }
+    @DeleteMapping("/items/{id}")
+    public OrderDto removeProduct(@PathVariable Long id, Principal principal) {
+        return converter.productToProductDto(orderService.removeProduct(principal.getName(),id));
+    }
+
+    @DeleteMapping("/items/")
+    public OrderDto removeAllProducts(Principal principal) {
+        return converter.productToProductDto(orderService.removeAll(principal.getName()));
+    }
 }

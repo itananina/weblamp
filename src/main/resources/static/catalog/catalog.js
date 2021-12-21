@@ -28,14 +28,5 @@ angular.module('weblamp').controller('catalogController', function ($scope, $roo
             });
     }
 
-    $scope.removeFromCart = function (productId) {
-        $http.delete(contextPath + '/api/v1/orders/items/' + productId)
-           .then(function (response) {
-                $rootScope.orderCount = response.data.count;
-                $rootScope.$broadcast('orderCount', $rootScope.orderCount);
-                $scope.isOrderEmpty = response.data.productList.length > 0 ? false : true;
-            });
-    }
-
     $scope.loadProducts(); //на лоаде
 });

@@ -13,11 +13,7 @@ import java.util.stream.Collectors;
 @Component
 public class DtoConverter {
 
-//    public Product dtoToEntity(ProductDto productDto) {
-//        return new Product(productDto.getId(), productDto.getTitle(), productDto.getPrice(),null);
-//    }
-
-    public ProductDto entityToDto(Product product) {
+    public ProductDto productToProductDto(Product product) {
         return new ProductDto(product.getId(), product.getTitle(), product.getPrice());
     }
 
@@ -25,12 +21,12 @@ public class DtoConverter {
         return new OrderProductDto(orderProduct.getId(), orderProduct.getProduct().getTitle(), orderProduct.getProduct().getPrice(), orderProduct.getAmount());
     }
 
-    public OrderDto entityToDto(Order order) {
+    public OrderDto productToProductDto(Order order) {
         return new OrderDto(
                 order.getId(),
                 order.getStatus(),
                 order.getOrderProducts().stream()
-                    .mapToInt(op->op.getProduct().getPrice())
+                    .mapToInt(op->op.getProduct().getPrice()*op.getAmount())
                     .sum(),
                 order.getOrderProducts().stream()
                     .map(op->opToOrderProductDto(op))

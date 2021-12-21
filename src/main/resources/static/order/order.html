@@ -6,12 +6,16 @@
                 <td>Продукт</td>
                 <td>Цена</td>
                 <td>&nbsp</td>
+                <td>&nbsp</td>
             </tr>
             <tbody>
             <tr ng-repeat="p in OrderedList">
                 <td>{{p.title}}</td>
                 <td>{{p.price}}</td>
                 <td>{{p.amount > 1 ? 'x'+ p.amount : ''}}</td>
+                <td>
+                    <button class="btn btn-danger" ng-click="removeFromCart(p.id)" data-ng-disabled="!isUserLoggedIn()">-</button>
+                </td>
             </tr>
             </tbody>
         </table>

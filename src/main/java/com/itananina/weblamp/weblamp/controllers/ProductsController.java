@@ -25,29 +25,12 @@ public class ProductsController {
             page = 1;
         }
         return productService.find(page, minPrice, maxPrice, titlePart)
-                .map(p->productConverter.entityToDto(p));
+                .map(p->productConverter.productToProductDto(p));
     }
 
     @GetMapping("{id}")
     public ProductDto showProduct(@PathVariable Long id) {
-        return productConverter.entityToDto(productService.findById(id));
+        return productConverter.productToProductDto(productService.findById(id));
     }
-
-//    @PutMapping
-//    public ProductDto updateProduct(@RequestBody ProductDto productDto) {
-//        return productConverter.entityToDto(productService.update(productDto));
-//    }
-//
-//    @DeleteMapping("{id}")
-//    public void deleteById(@PathVariable Long id) {
-//        productService.deleteById(id);
-//    }
-
-//    @PostMapping
-//    public ProductDto save(@RequestBody ProductDto productDto) {
-//        productDto.setId(null);
-//        Product product = productConverter.dtoToEntity(productDto);
-//        return productConverter.entityToDto(productService.save(product));
-//    }
 
 }

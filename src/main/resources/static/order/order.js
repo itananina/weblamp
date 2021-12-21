@@ -5,7 +5,6 @@ angular.module('weblamp').controller('orderController', function ($scope, $rootS
             $http.get(contextPath + '/api/v1/orders')
                 .then(function successCallback(response) {
                     $scope.OrderedList = response.data.productList;
-                    console.log(response.data);
                     $rootScope.orderCount = response.data.count;
                     $rootScope.$broadcast('orderCount', $rootScope.orderCount);
                     $scope.isOrderEmpty = response.data.productList.length > 0 ? false : true;
@@ -15,6 +14,17 @@ angular.module('weblamp').controller('orderController', function ($scope, $rootS
                         $location.path('/login');
                     });
             }
+
+    $scope.removeFromCart = function (productId) {
+        $http.delete(contextPath + '/api/v1/orders/items/' + productId)
+           .then(function (response) {
+                $scope.OrderedList = response.data.productList;
+                $rootScope.orderCount = response.data.count;
+                $scope.total = response.data.total;
+                $rootScope.$broadcast('orderCount', $rootScope.orderCount);
+                $scope.isOrderEmpty = response.data.productList.length > 0 ? false : true;
+            });
+    }
 
     $scope.removeAllFromCart = function (productId) {
             $http.delete(contextPath + '/api/v1/orders/items/')

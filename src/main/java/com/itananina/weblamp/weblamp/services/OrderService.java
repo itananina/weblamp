@@ -2,7 +2,6 @@ package com.itananina.weblamp.weblamp.services;
 
 import com.itananina.weblamp.weblamp.entities.Order;
 import com.itananina.weblamp.weblamp.entities.OrderProduct;
-import com.itananina.weblamp.weblamp.entities.Product;
 import com.itananina.weblamp.weblamp.entities.User;
 import com.itananina.weblamp.weblamp.exceptions.ResourceNotFoundException;
 import com.itananina.weblamp.weblamp.repositories.OrderProductRepository;
@@ -33,7 +32,6 @@ public class OrderService {
     }
 
     public Order getCurrentOrder(String username) {
-
         User user = userService.findByUsername(username).orElseThrow(()->new ResourceNotFoundException("User not found by username: "+username));
         Order order = orderRepository.findByUserIdAndStatus(user.getId(),"В процессе")
                 .orElseGet(()-> {
@@ -43,11 +41,28 @@ public class OrderService {
         return order;
     }
 
-//    public Order removeProduct(Long productId) {
-//        return orderRepository.deleteById(productId);
-//    }
-//
-//    public Order removeAll() {
-//        return orderRepository.removeAll();
-//    }
+    @Transactional
+    public Order removeProduct(String username, Long orderedProductId) {
+        Order order = getCurrentOrder(username);
+        OrderProduct orderedProduct = order.getOrderProducts().stream()
+                .filter(op->op.getId().equals(orderedProductId))
+                .findFirst()
+                .orElseThrow(()->new ResourceNotFoundException("Product not found in order by id: "+orderedProductId));
+        if(orderedProduct.getAmount() > 1) {
+            orderedProduct.setAmount(orderedProduct.getAmount()-1);
+        } else {
+            orderProductRepository.delete(orderedProduct);
+            order.getOrderProducts().remove(orderedProduct);
+        }
+        return order;
+    }
+
+    @Transactional
+    public Order removeAll(String username) {
+        Order order = getCurrentOrder(username);
+        order.getOrderProducts().clear();
+        orderProductRepository.deleteAllByOrderId(order.getId());
+        return order;
+    }
+
 }

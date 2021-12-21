@@ -23,7 +23,6 @@ public class OrderProduct {
     @JoinColumn(name="prod_id")
     private Product product;
 
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name="order_id")
     private Order order;
