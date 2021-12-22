@@ -10,13 +10,17 @@
                 templateUrl: 'catalog/catalog.html',
                 controller: 'catalogController'
             })
-            .when('/order', {
-                templateUrl: 'order/order.html',
-                controller: 'orderController'
+            .when('/cart', {
+                templateUrl: 'cart/cart.html',
+                controller: 'cartController'
             })
             .when('/login', {
                 templateUrl: 'login/login.html',
                 controller: 'loginController'
+            })
+            .when('/orders', {
+                templateUrl: 'orders/orders.html',
+                controller: 'ordersController'
             })
             .otherwise({
                 redirectTo: '/'
@@ -32,7 +36,7 @@ angular.module('weblamp').controller('indexController', function ($rootScope, $h
     const contextPath = 'http://localhost:8192/weblamp';
 
     $rootScope.loadOrder = function () {
-        $http.get(contextPath + '/api/v1/orders')
+        $http.get(contextPath + '/api/v1/orders/active')
             .then(function (response) {
                 $rootScope.orderCount = response.data.count;
             });

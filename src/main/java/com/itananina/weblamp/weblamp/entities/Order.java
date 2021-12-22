@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -35,5 +36,12 @@ public class Order {
     public Order(String status, User user) {
         this.status = status;
         this.user = user;
+    }
+
+    public List<OrderProduct> getOrderProducts() {
+        if(orderProducts==null) {
+            orderProducts = new ArrayList<>();
+        }
+        return orderProducts;
     }
 }

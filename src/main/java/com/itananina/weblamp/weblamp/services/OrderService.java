@@ -11,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -65,4 +67,18 @@ public class OrderService {
         return order;
     }
 
+    @Transactional
+    public Order confirmOrder(String username) {
+        Order order = getCurrentOrder(username);
+        order.setStatus("Оформлен");
+        order.setTotal(order.getOrderProducts().stream()
+                .mapToInt(op->op.getProduct().getPrice()*op.getAmount())
+                .sum());
+        return order;
+    }
+
+    public List<Order> findAllByUserId(String username) {
+        User user = userService.findByUsername(username).orElseThrow(()->new ResourceNotFoundException("User not found by username: "+username));
+        return orderRepository.findAllByUserId(user.getId());
+    }
 }

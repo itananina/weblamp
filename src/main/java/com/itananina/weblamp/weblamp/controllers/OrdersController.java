@@ -1,12 +1,15 @@
 package com.itananina.weblamp.weblamp.controllers;
 
 import com.itananina.weblamp.weblamp.converters.DtoConverter;
+import com.itananina.weblamp.weblamp.dto.ConfirmedOrderDto;
 import com.itananina.weblamp.weblamp.dto.OrderDto;
 import com.itananina.weblamp.weblamp.services.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/v1/orders")
@@ -16,22 +19,34 @@ public class OrdersController {
     private final DtoConverter converter;
 
     @GetMapping
-    public OrderDto showOrder(Principal principal) {
-        return converter.productToProductDto(orderService.getCurrentOrder(principal.getName()));
+    public List<ConfirmedOrderDto> getOrders(Principal principal) {
+        return orderService.findAllByUserId(principal.getName()).stream()
+                .map(el->converter.orderToConfirmedDto(el))
+                .collect(Collectors.toList());
     }
 
-    @PutMapping("/items/{id}")
+    @GetMapping("/active")
+    public OrderDto showOrder(Principal principal) {
+        return converter.orderToOrderDto(orderService.getCurrentOrder(principal.getName()));
+    }
+
+    @GetMapping("/confirm")
+    public ConfirmedOrderDto confirmOrder(Principal principal) {
+        return converter.orderToConfirmedDto(orderService.confirmOrder(principal.getName()));
+    }
+
+    @GetMapping("/items/{id}")
     public OrderDto addProduct(@PathVariable Long id, Principal principal) {
-        return converter.productToProductDto(orderService.addProduct(principal.getName(),id));
+        return converter.orderToOrderDto(orderService.addProduct(principal.getName(),id));
     }
 
     @DeleteMapping("/items/{id}")
     public OrderDto removeProduct(@PathVariable Long id, Principal principal) {
-        return converter.productToProductDto(orderService.removeProduct(principal.getName(),id));
+        return converter.orderToOrderDto(orderService.removeProduct(principal.getName(),id));
     }
 
     @DeleteMapping("/items/")
     public OrderDto removeAllProducts(Principal principal) {
-        return converter.productToProductDto(orderService.removeAll(principal.getName()));
+        return converter.orderToOrderDto(orderService.removeAll(principal.getName()));
     }
 }

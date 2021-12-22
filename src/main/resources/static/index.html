@@ -29,9 +29,12 @@
                         <a class="nav-link" href="#!/catalog">Каталог</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#!/order">Корзина
+                        <a class="nav-link" href="#!/cart">Корзина
                             <span ng-show="isUserLoggedIn()">{{'(' + orderCount +')'}}</span>
                         </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#!/orders">Заказы</a>
                     </li>
                 </ul>
                 <form class="form-inline my-2 my-lg-0" ng-show="!isUserLoggedIn()" ng-submit="goToLogin()">
@@ -48,8 +51,9 @@
 
     <script src="index.js"></script>
     <script src="catalog/catalog.js"></script>
-    <script src="order/order.js"></script>
+    <script src="cart/cart.js"></script>
     <script src="login/login.js"></script>
+    <script src="orders/orders.js"></script>
 
 </div>
 </body>

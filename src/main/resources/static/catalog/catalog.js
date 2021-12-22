@@ -20,7 +20,7 @@ angular.module('weblamp').controller('catalogController', function ($scope, $roo
     };
 
     $scope.addToCart = function (productId) {
-        $http.put(contextPath + '/api/v1/orders/items/' + productId)
+        $http.get(contextPath + '/api/v1/orders/items/' + productId)
             .then(function (response) {
                 $rootScope.orderCount = response.data.count;
                 $rootScope.$broadcast('orderCount', $rootScope.orderCount);
