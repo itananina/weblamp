@@ -4,7 +4,6 @@ import com.itananina.weblamp.weblamp.entities.Order;
 import com.itananina.weblamp.weblamp.entities.OrderProduct;
 import com.itananina.weblamp.weblamp.entities.User;
 import com.itananina.weblamp.weblamp.exceptions.ResourceNotFoundException;
-import com.itananina.weblamp.weblamp.repositories.OrderProductRepository;
 import com.itananina.weblamp.weblamp.repositories.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +19,6 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final ProductService productService;
     private final UserService userService;
-    private final OrderProductRepository orderProductRepository;
 
     @Transactional
     public Order addProduct(String username, Long productId) {
@@ -28,7 +26,11 @@ public class OrderService {
         OrderProduct orderedProduct = order.getOrderProducts().stream()
                 .filter(op->op.getProduct().getId().equals(productId))
                 .findFirst()
-                .orElseGet(()->orderProductRepository.save(new OrderProduct(productService.findById(productId),order)));
+                .orElseGet(()->{
+                    OrderProduct op = new OrderProduct(productService.findById(productId),order);
+                    order.getOrderProducts().add(op);
+                    return op;
+                });
         orderedProduct.setAmount(orderedProduct.getAmount()==null ? 1 : orderedProduct.getAmount()+1);
         return order;
     }
@@ -53,7 +55,6 @@ public class OrderService {
         if(orderedProduct.getAmount() > 1) {
             orderedProduct.setAmount(orderedProduct.getAmount()-1);
         } else {
-            orderProductRepository.delete(orderedProduct);
             order.getOrderProducts().remove(orderedProduct);
         }
         return order;
@@ -63,7 +64,6 @@ public class OrderService {
     public Order removeAll(String username) {
         Order order = getCurrentOrder(username);
         order.getOrderProducts().clear();
-        orderProductRepository.deleteAllByOrderId(order.getId());
         return order;
     }
 

@@ -23,6 +23,7 @@ angular.module('weblamp').controller('catalogController', function ($scope, $roo
         $http.get(contextPath + '/api/v1/orders/items/' + productId)
             .then(function (response) {
                 $rootScope.orderCount = response.data.count;
+                console.log($rootScope.orderCount);
                 $rootScope.refresh();
                 $scope.isOrderEmpty = response.data.productList.length > 0 ? false : true;
             });
