@@ -30,7 +30,7 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#!/cart">Корзина
-                            <span ng-show="isUserLoggedIn()">{{'(' + orderCount +')'}}</span>
+                            <span ng-show="isUserLoggedIn()" ng-click="refresh()">{{'(' + orderCount +')'}}</span>
                         </a>
                     </li>
                     <li class="nav-item">

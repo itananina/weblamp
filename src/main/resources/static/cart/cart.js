@@ -6,7 +6,7 @@ angular.module('weblamp').controller('cartController', function ($scope, $rootSc
             .then(function successCallback(response) {
                 $scope.OrderedList = response.data.productList;
                 $rootScope.orderCount = response.data.count;
-                $rootScope.$broadcast('orderCount', $rootScope.orderCount);
+                $rootScope.refresh();
                 $scope.isOrderEmpty = response.data.productList.length > 0 ? false : true;
                 $scope.total = response.data.total;
             }, function errorCallback(response) {
@@ -21,7 +21,7 @@ angular.module('weblamp').controller('cartController', function ($scope, $rootSc
                 $scope.OrderedList = response.data.productList;
                 $rootScope.orderCount = response.data.count;
                 $scope.total = response.data.total;
-                $rootScope.$broadcast('orderCount', $rootScope.orderCount);
+                $rootScope.refresh();
                 $scope.isOrderEmpty = response.data.productList.length > 0 ? false : true;
             });
     }
@@ -31,7 +31,7 @@ angular.module('weblamp').controller('cartController', function ($scope, $rootSc
            .then(function (response) {
                 $scope.OrderedList = response.data.productList;
                 $rootScope.orderCount = response.data.count;
-                $rootScope.$broadcast('orderCount', $rootScope.orderCount);
+                $rootScope.refresh();
                 $scope.isOrderEmpty = response.data.productList.length > 0 ? false : true;
                 $scope.total = response.data.total;
         });
@@ -42,7 +42,7 @@ angular.module('weblamp').controller('cartController', function ($scope, $rootSc
             .then(function successCallback(response) {
                 $scope.OrderedList = null;
                 $rootScope.orderCount = 0;
-                $rootScope.$broadcast('orderCount', $rootScope.orderCount);
+                $rootScope.refresh();
                 $scope.isOrderEmpty = true;
                 $scope.total = 0;
              }, function errorCallback(response) {

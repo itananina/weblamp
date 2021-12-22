@@ -37,11 +37,11 @@ angular.module('weblamp').controller('indexController', function ($rootScope, $h
 
     $rootScope.loadOrder = function () {
         $http.get(contextPath + '/api/v1/orders/active')
-            .then(function (response) {
+            .then(function successCallback(response) {
                 $rootScope.orderCount = response.data.count;
+            }, function errorCallback(response) {
             });
         }
-    $rootScope.loadOrder();
 
     $rootScope.isUserLoggedIn = function () {
         if ($localStorage.springWebUser) {
@@ -77,8 +77,12 @@ angular.module('weblamp').controller('indexController', function ($rootScope, $h
         $location.path('/login');
     };
 
-    $rootScope.$on('orderCount', function (event, data) {
-    });
+    if($rootScope.isUserLoggedIn()) {
+        $rootScope.loadOrder();
+    }
+
+    $rootScope.refresh = function () {
+    };
 
 });
 
