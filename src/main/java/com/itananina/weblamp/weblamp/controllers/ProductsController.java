@@ -28,9 +28,10 @@ public class ProductsController {
                 .map(p->productConverter.productToProductDto(p));
     }
 
-    @GetMapping("{id}")
-    public ProductDto showProduct(@PathVariable Long id) {
-        return productConverter.productToProductDto(productService.findById(id));
-    }
+//    @GetMapping("{id}")
+//    public ProductDto showProduct(@PathVariable Long id) {
+//        return productConverter.productToProductDto(productService.findById(id));
+//    }
+
 
 }
