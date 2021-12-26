@@ -2,13 +2,18 @@ package com.itananina.weblamp.weblamp.services;
 
 import com.itananina.weblamp.weblamp.entities.Role;
 import com.itananina.weblamp.weblamp.entities.User;
+import com.itananina.weblamp.weblamp.exceptions.ResourceNotFoundException;
+import com.itananina.weblamp.weblamp.exceptions.UserAlreadyExistsException;
+import com.itananina.weblamp.weblamp.repositories.RoleRepository;
 import com.itananina.weblamp.weblamp.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,8 +26,11 @@ import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
+    private final BCryptPasswordEncoder encoder;
 
     @Override
     @Transactional //чтобы не было ошибки лэйзи лоада на user.getRoles()
@@ -52,5 +60,20 @@ public class UserService implements UserDetailsService {
 
     public List<String> getUserList() {
         return userRepository.findAll().stream().map(u->u.getUsername()).collect(Collectors.toList());
+    }
+
+    @Transactional
+    public UserDetails createUser(User newUser) throws UserAlreadyExistsException {
+        Optional<User> user = findByUsername(newUser.getUsername());
+        if(user.isPresent()) {
+            throw new UserAlreadyExistsException(String.format("User '%s' already exists", newUser.getUsername()));
+        } else {
+            String newPass = encoder.encode(newUser.getPassword());
+            newUser.setPassword(newPass);
+            Role userRole = roleRepository.findByName("ROLE_USER").orElseThrow(()->new ResourceNotFoundException("ROLE_USER not found"));
+            newUser.getRoles().add(userRole);
+            newUser = userRepository.save(newUser);
+        }
+        return new org.springframework.security.core.userdetails.User(newUser.getUsername(), newUser.getPassword(), mapRolesToAuthorities(newUser.getRoles()));
     }
 }

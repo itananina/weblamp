@@ -24,6 +24,8 @@ public class JwtTokenUtil {
     private Integer jwtLifetime;
 
     public String generateToken(UserDetails userDetails) {
+        //токен состоит из хэдера(тут алгоритм, вид...) пэйлоада(вся инфа) подписи(хэш по ключу который знает только сервер)
+        //заполняем пэйлоад
         Map<String, Object> claims = new HashMap<>();
         List<String> rolesList = userDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
@@ -37,7 +39,7 @@ public class JwtTokenUtil {
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(issuedDate)
                 .setExpiration(expiredDate)
-                .signWith(SignatureAlgorithm.HS256, secret)
+                .signWith(SignatureAlgorithm.HS256, secret) //подпись
                 .compact();
     }
 
@@ -54,9 +56,9 @@ public class JwtTokenUtil {
         return claimsResolver.apply(claims);
     }
 
-    private Claims getAllClaimsFromToken(String token) {
+    private Claims getAllClaimsFromToken(String token) { //проверить подпись токена и достать все полезные данные
         return Jwts.parser()
-                .setSigningKey(secret)
+                .setSigningKey(secret) //ключ известен только серверу
                 .parseClaimsJws(token)
                 .getBody();
     }

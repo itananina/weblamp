@@ -40,6 +40,9 @@
                 <form class="form-inline my-2 my-lg-0" ng-show="!isUserLoggedIn()" ng-submit="goToLogin()">
                     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Войти</button>
                 </form>
+                <form class="form-inline my-2 my-lg-0" ng-show="!isUserLoggedIn()" ng-submit="goToSignUp()">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Зарегистрироваться</button>
+                </form>
                 <form class="form-inline my-2 my-lg-0" ng-submit="logout()" ng-show="isUserLoggedIn()">
                     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Выйти</button>
                 </form>
@@ -54,6 +57,7 @@
     <script src="cart/cart.js"></script>
     <script src="login/login.js"></script>
     <script src="orders/orders.js"></script>
+    <script src="sign-up/sign-up.js"></script>
 
 </div>
 </body>

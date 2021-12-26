@@ -1,15 +1,12 @@
 package com.itananina.weblamp.weblamp.converters;
 
-import com.itananina.weblamp.weblamp.dto.ConfirmedOrderDto;
-import com.itananina.weblamp.weblamp.dto.OrderDto;
-import com.itananina.weblamp.weblamp.dto.OrderProductDto;
+import com.itananina.weblamp.weblamp.dto.*;
 import com.itananina.weblamp.weblamp.entities.Order;
 import com.itananina.weblamp.weblamp.entities.OrderProduct;
 import com.itananina.weblamp.weblamp.entities.Product;
-import com.itananina.weblamp.weblamp.dto.ProductDto;
+import com.itananina.weblamp.weblamp.entities.User;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
@@ -44,4 +41,9 @@ public class DtoConverter {
                         .mapToInt(op->op.getAmount())
                         .sum());
     }
+
+    public User jwtRequestToUser(JwtRequest jwtRequest) {
+        return new User(jwtRequest.getUsername(), jwtRequest.getPassword(), jwtRequest.getEmail());
+    }
+
 }

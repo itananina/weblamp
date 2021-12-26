@@ -27,20 +27,22 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String authHeader = request.getHeader("Authorization");
+        String authHeader = request.getHeader("Authorization"); //всегда должен быть иначе чет кривое шлют
 
         String username = null;
         String jwt = null;
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             jwt = authHeader.substring(7);
             try {
-                username = jwtTokenUtil.getUsernameFromToken(jwt);
+                username = jwtTokenUtil.getUsernameFromToken(jwt); //валидируем и достаем из токена
             } catch (ExpiredJwtException e) {
                 log.debug("The token is expired");
             }
         }
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            //вручную заполняем секьюрити контекст
+            //достаем инфу из токена, другой вариант: каждый раз перепроверять есть ли этот юзер все еше в бд
             UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, null, jwtTokenUtil.getRoles(jwt).stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList()));
             SecurityContextHolder.getContext().setAuthentication(token);
         }

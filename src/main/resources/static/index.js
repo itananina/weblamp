@@ -22,6 +22,10 @@
                 templateUrl: 'orders/orders.html',
                 controller: 'ordersController'
             })
+            .when('/sign-up', {
+                templateUrl: 'sign-up/sign-up.html',
+                controller: 'signUpController'
+            })
             .otherwise({
                 redirectTo: '/'
             });
@@ -75,6 +79,11 @@ angular.module('weblamp').controller('indexController', function ($rootScope, $h
     $rootScope.goToLogin = function () {
         $rootScope.wayForAuth = $location.url();
         $location.path('/login');
+    };
+
+    $rootScope.goToSignUp = function () {
+        $rootScope.wayForAuth = $location.url();
+        $location.path('/sign-up');
     };
 
     if($rootScope.isUserLoggedIn()) {

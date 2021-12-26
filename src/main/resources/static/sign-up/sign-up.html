@@ -1,0 +1,14 @@
+<div>
+    <form class="align-middle" ng-submit="signUp()" autocomplete="off" style="width:30%">
+        <div class="form-group">
+            <input type="text" class="form-control" id="newUsername" ng-model="user.username" placeholder="Username" required>
+        </div>
+        <div class="form-group">
+            <input type="text" class="form-control" id="email" ng-model="user.email" placeholder="Email" required>
+        </div>
+        <div class="form-group">
+            <input type="password" class="form-control" id="newPassword" ng-model="user.password" placeholder="Password" autocomplete="new-password" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
+    </form>
+</div>
