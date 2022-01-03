@@ -67,13 +67,12 @@ public class UserService implements UserDetailsService {
         Optional<User> user = findByUsername(newUser.getUsername());
         if(user.isPresent()) {
             throw new UserAlreadyExistsException(String.format("User '%s' already exists", newUser.getUsername()));
-        } else {
-            String newPass = encoder.encode(newUser.getPassword());
-            newUser.setPassword(newPass);
-            Role userRole = roleRepository.findByName("ROLE_USER").orElseThrow(()->new ResourceNotFoundException("ROLE_USER not found"));
-            newUser.getRoles().add(userRole);
-            newUser = userRepository.save(newUser);
         }
+        String newPass = encoder.encode(newUser.getPassword());
+        newUser.setPassword(newPass);
+        Role userRole = roleRepository.findByName("ROLE_USER").orElseThrow(()->new ResourceNotFoundException("ROLE_USER not found"));
+        newUser.getRoles().add(userRole);
+        newUser = userRepository.save(newUser);
         return new org.springframework.security.core.userdetails.User(newUser.getUsername(), newUser.getPassword(), mapRolesToAuthorities(newUser.getRoles()));
     }
 }
