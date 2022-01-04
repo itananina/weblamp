@@ -13,5 +13,4 @@ public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpec
     Optional<Product> findById(Long id);
     List<Product> findAll();
     void deleteById(Long id);
-    List<Product> findAllByPriceBetween(Integer min, Integer max);
 }
