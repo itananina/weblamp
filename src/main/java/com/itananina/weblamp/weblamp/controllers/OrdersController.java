@@ -45,7 +45,7 @@ public class OrdersController {
         return converter.orderToOrderDto(orderService.removeProduct(principal.getName(),id));
     }
 
-    @DeleteMapping("/items/")
+    @DeleteMapping("/items")
     public OrderDto removeAllProducts(Principal principal) {
         return converter.orderToOrderDto(orderService.removeAll(principal.getName()));
     }

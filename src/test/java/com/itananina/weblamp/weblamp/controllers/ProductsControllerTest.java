@@ -1,33 +1,26 @@
 package com.itananina.weblamp.weblamp.controllers;
 
+import com.itananina.weblamp.weblamp.AbstractSpringBootTest;
 import com.jayway.jsonpath.JsonPath;
 import org.junit.jupiter.api.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-
-@SpringBootTest //tells Spring Boot to look for a @SpringBootApplication and use that to start a Spring application context.
-@AutoConfigureMockMvc
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-//@WebMvcTest //создаст только бин контроллера, а инжекции создавать не будет
-public class ProductsControllerTest {
+public class ProductsControllerTest extends AbstractSpringBootTest {
 
-    @Autowired
-    private MockMvc mockMvc; //позволяет тестировать контроллеры без запуска http-сервера, при выполнении тестов сетевое соединение не создается
     private static Integer totalElements = 0;
+    private static final String REST_URL = "/api/v1/products";
 
     @Test
     @Order(1)
     void pageSizeCheck() throws Exception {
-        this.mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/products"))
+        perform(MockMvcRequestBuilders.get(REST_URL))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
+                .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.pageable.pageSize").value("4"))
                 .andDo(mvcResult -> {
                     String response = mvcResult.getResponse().getContentAsString();
@@ -37,38 +30,38 @@ public class ProductsControllerTest {
 
     @Test
     void pageNumberBelowZeroCheck() throws Exception {
-        this.mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/products?page=-1"))
+        perform(MockMvcRequestBuilders.get(REST_URL+"?page=-1"))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
+                .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.pageable.pageNumber").value("0"));
     }
 
     @Test
     void maxFilterBelowZeroCheck() throws Exception {
-        this.mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/products?max_price=-1"))
+        perform(MockMvcRequestBuilders.get(REST_URL+"?max_price=-1"))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
+                .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.content").isEmpty());
     }
 
     @Test
     void minFilterAtMaxValueCheck() throws Exception {
-        this.mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/products?min_price=1000000000"))
+        perform(MockMvcRequestBuilders.get(REST_URL+"?min_price=1000000000"))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
+                .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.content").isEmpty());
     }
 
     @Test
     @Order(2)
     void titlePartFilterCheck() throws Exception {
-        this.mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/products?title_part=о"))
+        perform(MockMvcRequestBuilders.get(REST_URL+"?title_part=о"))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentType("application/json"))
+                .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.[?(@.totalElements < "+totalElements+")]").exists());
     }
 

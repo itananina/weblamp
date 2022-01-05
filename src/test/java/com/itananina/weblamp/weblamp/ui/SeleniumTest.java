@@ -1,5 +1,6 @@
 package com.itananina.weblamp.weblamp.ui;
 
+import com.itananina.weblamp.weblamp.AbstractSpringBootTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
@@ -7,7 +8,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 
 public class SeleniumTest {
-    @Test
+    //@Test
     void test() {
         //given
         System.setProperty("webdriver.chrome.driver", "../chromedriver_96/chromedriver.exe");
