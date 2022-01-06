@@ -3,6 +3,10 @@ angular.module('weblamp').controller('loginController', function ($scope, $rootS
 
     $rootScope.auth = function () {
             $rootScope.user=$scope.user;
+//            var date = new Date();
+//            timezoneOffset = date.getTimezoneOffset() / 60 * (-1);
+//            $rootScope.user.timezoneOffset = timezoneOffset;
+//            console.log($rootScope.user);
             $http.post(contextPath+'/auth', $rootScope.user)
                 .then(function successCallback(response) {
                     if (response.data.token) {

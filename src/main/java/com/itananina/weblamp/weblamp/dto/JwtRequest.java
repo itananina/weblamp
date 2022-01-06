@@ -11,6 +11,7 @@ public class JwtRequest {
     private String username;
     private String password;
     private String email;
+    //private Integer timezoneOffset;
 
     public JwtRequest(String username, String password) {
         this.username = username;

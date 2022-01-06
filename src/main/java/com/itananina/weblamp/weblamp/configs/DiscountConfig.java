@@ -4,6 +4,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
 @Configuration
-@PropertySource("classpath:/configs/secrets.properties")
-public class JwtConfig {
+@PropertySource("classpath:/configs/discount.properties")
+public class DiscountConfig {
 }
