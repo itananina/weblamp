@@ -111,7 +111,7 @@ public class OrderControllerWithMockRepoTest extends AbstractSpringBootTest {
     @Test
     public void confirmOrderCheck() throws Exception {
         int totalMockValue = mockOrder.getOrderProducts().stream()
-                .mapToInt(el-> el.getAmount()*el.getProduct().getPrice())
+                .mapToInt(el-> el.getAmount()*el.getPricePerProduct())
                 .sum();
 
         perform(MockMvcRequestBuilders.get(REST_URL+"/confirm")
