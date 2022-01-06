@@ -1,9 +1,6 @@
 package com.itananina.weblamp.weblamp.controllers;
 
 import com.itananina.weblamp.weblamp.AbstractSpringBootTest;
-import com.itananina.weblamp.weblamp.entities.User;
-import com.itananina.weblamp.weblamp.repositories.OrderRepository;
-import com.itananina.weblamp.weblamp.repositories.UserRepository;
 import com.itananina.weblamp.weblamp.services.JwtTokenUtil;
 import com.itananina.weblamp.weblamp.services.UserService;
 import org.junit.Assert;
@@ -16,7 +13,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 
 public class OrdersControllerTest extends AbstractSpringBootTest {
 
@@ -27,10 +23,6 @@ public class OrdersControllerTest extends AbstractSpringBootTest {
     private JwtTokenUtil jwtTokenUtil;
     @Autowired
     private UserService userService;
-    @Autowired
-    private OrderRepository orderRepository;
-    @Autowired
-    private UserRepository userRepository;
 
     @PostConstruct
     private void init() {
@@ -64,14 +56,5 @@ public class OrdersControllerTest extends AbstractSpringBootTest {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.productList[0]").isNotEmpty());
-    }
-
-    @PreDestroy
-    private void removeOrderByUsername() {
-        orderRepository.deleteByUserId(findUserByUsername().getId());
-    }
-
-    private User findUserByUsername() {
-        return userRepository.findByUsername(userDetails.getUsername()).orElseThrow(()->new RuntimeException("Exception trying to find user "+userDetails.getUsername()));
     }
 }

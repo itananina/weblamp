@@ -10,7 +10,7 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import javax.transaction.Transactional;
 
 @SpringBootTest
-@Transactional
+@Transactional //все тесты в классе транзакционные, с автоматическим откатом транзакции по завершению теста
 @AutoConfigureMockMvc
 public abstract class AbstractSpringBootTest {
 

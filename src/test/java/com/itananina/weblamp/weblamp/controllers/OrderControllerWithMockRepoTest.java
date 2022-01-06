@@ -32,7 +32,7 @@ public class OrderControllerWithMockRepoTest extends AbstractSpringBootTest {
     private static final String REST_URL = "/api/v1/orders";
     private UserDetails userDetails;
     private String token;
-    private static Order mockOrder;
+    private Order mockOrder;
 
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
@@ -47,7 +47,6 @@ public class OrderControllerWithMockRepoTest extends AbstractSpringBootTest {
     public void init() {
         userDetails = userService.loadUserByUsername("autotestuser");
         token = jwtTokenUtil.generateToken(userDetails);
-        System.out.println("reached before");
         mockOrder = new Order("В процессе",findUserByUsername());
         mockOrder.setId(1l);
         mockOrder.setOrderProducts(new ArrayList<>(Arrays.asList(
