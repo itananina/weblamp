@@ -48,6 +48,8 @@ create table orders_products (
     foreign key (prod_id) references products (id)
 );
 
+alter table orders_products add column price_per_product INTEGER NOT NULL DEFAULT 0;
+
 insert into roles (name)
 values
 ('ROLE_USER'), ('ROLE_ADMIN');
@@ -60,12 +62,13 @@ insert into users (username, password, email)
 values
 ('user', '$2a$12$DluBTYzdAtzk/IDeJ/zb1uPeTFcUfPpRJSvz0FabBk.ZVuQ4IJSye', 'user@gmail.com'),
 ('admin', '$2a$12$DluBTYzdAtzk/IDeJ/zb1uPeTFcUfPpRJSvz0FabBk.ZVuQ4IJSye', 'admin@gmail.com'),
-('eera', '$2a$12$DluBTYzdAtzk/IDeJ/zb1uPeTFcUfPpRJSvz0FabBk.ZVuQ4IJSye', 'eera@gmail.com')
+('eera', '$2a$12$DluBTYzdAtzk/IDeJ/zb1uPeTFcUfPpRJSvz0FabBk.ZVuQ4IJSye', 'eera@gmail.com'),
+('autotestuser', '$2a$12$DluBTYzdAtzk/IDeJ/zb1uPeTFcUfPpRJSvz0FabBk.ZVuQ4IJSye', 'autotestuser@gmail.com')
 ;
 
 insert into users_roles (user_id, role_id)
 values
-(1, 1), (2, 2), (3,1);
+(1, 1), (2, 2), (3,1), (4,1);
 
 insert into roles_authorities (role_id, auth_id)
 values
@@ -93,3 +96,4 @@ values
 ('Светильник', 1500),
 ('Горшок', 200),
 ('Плед', 1000);
+

@@ -19,6 +19,7 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final ProductService productService;
     private final UserService userService;
+    private final DiscountService discountService;
 
     @Transactional
     public Order addProduct(String username, Long productId) {
@@ -31,6 +32,7 @@ public class OrderService {
                     order.getOrderProducts().add(op);
                     return op;
                 });
+        orderedProduct.setPricePerProduct(discountService.getDiscountForToday().map(d -> orderedProduct.getProduct().getPrice()*(100-d)/100).orElse(orderedProduct.getProduct().getPrice())); //актуализирую цену
         orderedProduct.setAmount(orderedProduct.getAmount()==null ? 1 : orderedProduct.getAmount()+1);
         return order;
     }
@@ -72,7 +74,7 @@ public class OrderService {
         Order order = getCurrentOrder(username);
         order.setStatus("Оформлен");
         order.setTotal(order.getOrderProducts().stream()
-                .mapToInt(op->op.getProduct().getPrice()*op.getAmount())
+                .mapToInt(op->op.getPricePerProduct()*op.getAmount())
                 .sum());
         return order;
     }

@@ -50,8 +50,8 @@ public class OrderControllerWithMockRepoTest extends AbstractSpringBootTest {
         mockOrder = new Order("В процессе",findUserByUsername());
         mockOrder.setId(1l);
         mockOrder.setOrderProducts(new ArrayList<>(Arrays.asList(
-                new OrderProduct(1L,new Product(1l,"Title1",50),mockOrder,1),
-                new OrderProduct(2L,new Product(2l,"Title2",100),mockOrder,2))));
+                new OrderProduct(1L,new Product(1l,"Title1",50),mockOrder,100,1),
+                new OrderProduct(2L,new Product(2l,"Title2",100),mockOrder,100,2))));
         Assertions.assertNotNull(token);
         Mockito.when(mockOrderRepository.findByUserIdAndStatus(findUserByUsername().getId(),"В процессе")).
                 thenReturn(Optional.of(mockOrder));

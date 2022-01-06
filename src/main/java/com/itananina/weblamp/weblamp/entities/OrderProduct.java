@@ -1,6 +1,5 @@
 package com.itananina.weblamp.weblamp.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,6 +25,9 @@ public class OrderProduct {
     @ManyToOne
     @JoinColumn(name="order_id")
     private Order order;
+
+    @Column(name="price_per_product")
+    private Integer pricePerProduct;
 
     @Column(name="amount")
     private Integer amount;

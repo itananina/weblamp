@@ -20,7 +20,7 @@ public class DtoConverter {
     private final DiscountService discountService;
 
     private Integer getPriceWithDiscountIfPresent(Optional<Integer> discount, Integer price) {
-        return discount.map(d -> price*d/100).orElse(price);
+        return discount.map(d -> price*(100-d)/100).orElse(price);
     }
 
     public Page<ProductDto> productPageToProductDtoPage(Page<Product> productPage) {
@@ -33,22 +33,21 @@ public class DtoConverter {
                 getPriceWithDiscountIfPresent(discount, product.getPrice()));
     }
 
-    public OrderProductDto opToOrderProductDto(OrderProduct orderProduct, Optional<Integer> discount) {
+    public OrderProductDto opToOrderProductDto(OrderProduct orderProduct) {
         return new OrderProductDto(orderProduct.getId(), orderProduct.getProduct().getTitle(),
-                getPriceWithDiscountIfPresent(discount, orderProduct.getProduct().getPrice()),
+                orderProduct.getPricePerProduct(),
                 orderProduct.getAmount());
     }
 
     public OrderDto orderToOrderDto(Order order) {
-        Optional<Integer> discount = discountService.getDiscountForToday();
         return new OrderDto(
                 order.getId(),
                 order.getStatus(),
                 order.getOrderProducts().stream()
-                    .mapToInt(op->getPriceWithDiscountIfPresent(discount, op.getProduct().getPrice())*op.getAmount())
+                    .mapToInt(op->op.getPricePerProduct()*op.getAmount())
                     .sum(),
                 order.getOrderProducts().stream()
-                    .map(op->opToOrderProductDto(op,discount))
+                    .map(op->opToOrderProductDto(op))
                     .collect(Collectors.toList()),
                 order.getOrderProducts().stream()
                     .mapToInt(op->op.getAmount())
