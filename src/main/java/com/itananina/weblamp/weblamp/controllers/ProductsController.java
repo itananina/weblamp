@@ -7,12 +7,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping("api/v1/products")
 @RequiredArgsConstructor
 public class ProductsController {
     private final ProductService productService;
     private final DtoConverter productConverter;
+
 
     @GetMapping
     public Page<ProductDto> showProducts(
@@ -24,8 +27,8 @@ public class ProductsController {
         if (page < 1) {
             page = 1;
         }
-        return productService.find(page, minPrice, maxPrice, titlePart)
-                .map(p->productConverter.productToProductDto(p));
+        // конвертируем весь пэйдж, чтобы конвертер брал одну и ту же скидку для всех элементов
+        return productConverter.productPageToProductDtoPage(productService.find(page, minPrice, maxPrice, titlePart));
     }
 
 }

@@ -27,5 +27,4 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(new AppError(HttpStatus.UNAUTHORIZED.value(), e.getMessage()), HttpStatus.UNAUTHORIZED);
     }
 
-
 }

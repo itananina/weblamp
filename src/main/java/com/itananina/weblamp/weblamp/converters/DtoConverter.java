@@ -5,31 +5,51 @@ import com.itananina.weblamp.weblamp.entities.Order;
 import com.itananina.weblamp.weblamp.entities.OrderProduct;
 import com.itananina.weblamp.weblamp.entities.Product;
 import com.itananina.weblamp.weblamp.entities.User;
+import com.itananina.weblamp.weblamp.services.DiscountService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
+@RequiredArgsConstructor
 public class DtoConverter {
 
-    public ProductDto productToProductDto(Product product) {
-        return new ProductDto(product.getId(), product.getTitle(), product.getPrice());
+    private final DiscountService discountService;
+
+    private Integer getPriceWithDiscountIfPresent(Optional<Integer> discount, Integer price) {
+        return discount.map(d -> price*d/100).orElse(price);
     }
 
-    public OrderProductDto opToOrderProductDto(OrderProduct orderProduct) {
-        return new OrderProductDto(orderProduct.getId(), orderProduct.getProduct().getTitle(), orderProduct.getProduct().getPrice(), orderProduct.getAmount());
+    public Page<ProductDto> productPageToProductDtoPage(Page<Product> productPage) {
+        Optional<Integer> discount = discountService.getDiscountForToday();
+        return productPage.map(p->productToProductDto(p,discount));
+    }
+
+    public ProductDto productToProductDto(Product product, Optional<Integer> discount) {
+        return new ProductDto(product.getId(), product.getTitle(),
+                getPriceWithDiscountIfPresent(discount, product.getPrice()));
+    }
+
+    public OrderProductDto opToOrderProductDto(OrderProduct orderProduct, Optional<Integer> discount) {
+        return new OrderProductDto(orderProduct.getId(), orderProduct.getProduct().getTitle(),
+                getPriceWithDiscountIfPresent(discount, orderProduct.getProduct().getPrice()),
+                orderProduct.getAmount());
     }
 
     public OrderDto orderToOrderDto(Order order) {
+        Optional<Integer> discount = discountService.getDiscountForToday();
         return new OrderDto(
                 order.getId(),
                 order.getStatus(),
                 order.getOrderProducts().stream()
-                    .mapToInt(op->op.getProduct().getPrice()*op.getAmount())
+                    .mapToInt(op->getPriceWithDiscountIfPresent(discount, op.getProduct().getPrice())*op.getAmount())
                     .sum(),
                 order.getOrderProducts().stream()
-                        .map(op->opToOrderProductDto(op))
-                        .collect(Collectors.toList()),
+                    .map(op->opToOrderProductDto(op,discount))
+                    .collect(Collectors.toList()),
                 order.getOrderProducts().stream()
                     .mapToInt(op->op.getAmount())
                     .sum());

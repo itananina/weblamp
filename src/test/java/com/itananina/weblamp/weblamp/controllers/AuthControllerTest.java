@@ -79,7 +79,7 @@ public class AuthControllerTest extends AbstractSpringBootTest {
 
     @Test
     public void createUserCheck() throws Exception {
-        JwtRequest jwtRequest = new JwtRequest("autotest_signup","1234");
+        JwtRequest jwtRequest = new JwtRequest("autotest_signup","1234","autotest_signup@mail.ru");
 
         perform(MockMvcRequestBuilders.post("/sign-up")
                     .content(objectMapper.writeValueAsString(jwtRequest))
