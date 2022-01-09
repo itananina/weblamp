@@ -83,4 +83,8 @@ public class OrderService {
         User user = userService.findByUsername(username).orElseThrow(()->new ResourceNotFoundException("User not found by username: "+username));
         return orderRepository.findAllByUserId(user.getId());
     }
+
+    public Order findById(Long id) {
+        return orderRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Order not found by id: "+id));
+    }
 }

@@ -1,6 +1,5 @@
 package com.itananina.weblamp.weblamp.configs;
 
-import com.itananina.weblamp.weblamp.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
@@ -22,6 +21,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeRequests()
+                .antMatchers("/api/v1/orders/{id:\\d+}").permitAll()
                 .antMatchers("/api/v1/orders/**").authenticated()
                 .anyRequest().permitAll()
                 .and()

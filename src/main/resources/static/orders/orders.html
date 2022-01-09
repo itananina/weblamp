@@ -8,7 +8,7 @@
             <td>Количество товаров</td>
         </tr>
         <tbody>
-        <tr ng-repeat="p in ConfirmedList">
+        <tr ng-repeat="p in ConfirmedList" ng-click="showDetails(p.id)" >
             <td>{{p.id}}</td>
             <td>{{p.status}}</td>
             <td>{{p.total}}</td>
