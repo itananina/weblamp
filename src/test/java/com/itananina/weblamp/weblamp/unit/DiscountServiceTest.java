@@ -1,7 +1,5 @@
 package com.itananina.weblamp.weblamp.unit;
 
-import com.itananina.weblamp.weblamp.converters.DtoConverter;
-import com.itananina.weblamp.weblamp.exceptions.UnableToRetrieveDiscountException;
 import com.itananina.weblamp.weblamp.services.DiscountService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

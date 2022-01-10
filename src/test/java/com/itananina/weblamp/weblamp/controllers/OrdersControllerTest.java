@@ -57,4 +57,21 @@ public class OrdersControllerTest extends AbstractSpringBootTest {
                 .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.productList[0]").isNotEmpty());
     }
+
+    @Test
+    public void getOrdersWhenAuthorizedCheck() throws Exception {
+        Assert.assertNotNull(token);
+        perform(MockMvcRequestBuilders.get(REST_URL)
+                    .header("Authorization", "Bearer " + token))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
+    }
+
+    @Test
+    public void getOrdersWhenUnauthorizedCheck() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isUnauthorized());
+    }
 }
