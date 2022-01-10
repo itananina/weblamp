@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.security.Principal;
+
 @Controller
-@RequestMapping("api/v1/cart/{username}")
+@RequestMapping("api/v1/cart")
 @RequiredArgsConstructor
 @Slf4j
 public class CartController {
@@ -20,26 +22,25 @@ public class CartController {
     private final DtoConverter converter;
 
     @GetMapping
-    public String showOrder(@PathVariable String username, Model model) {
-        model.addAttribute("username",username);
-        model.addAttribute("order", converter.orderToOrderDto(orderService.getCurrentOrder(username)));
+    public String showOrder(Model model, Principal principal) {
+        model.addAttribute("order", converter.orderToOrderDto(orderService.getCurrentOrder(principal.getName())));
         return "cart";
     }
 
     @DeleteMapping("/items/{id}")
-    public String removeProduct(@PathVariable String username, @PathVariable Long id, Model model) {
-        orderService.removeProduct(username,id);
-        return "redirect:/api/v1/cart/"+username;
+    public String removeProduct(@PathVariable Long id, Principal principal) {
+        orderService.removeProduct(principal.getName(),id);
+        return "redirect:/api/v1/cart/";
     }
 
     @DeleteMapping("/items")
-    public String removeAllProducts(@PathVariable String username, Model model) {
-        orderService.removeAll(username);
-        return "redirect:/api/v1/cart/"+username;
+    public String removeAllProducts(Principal principal) {
+        orderService.removeAll(principal.getName());
+        return "redirect:/api/v1/cart/";
     }
 
     @GetMapping("/confirm")
-    public String confirmOrder(@PathVariable String username, Model model) {
-        return "redirect:/api/v1/orders/"+orderService.confirmOrder(username).getId();
+    public String confirmOrder(Principal principal) {
+        return "redirect:/api/v1/orders/"+orderService.confirmOrder(principal.getName()).getId();
     }
 }

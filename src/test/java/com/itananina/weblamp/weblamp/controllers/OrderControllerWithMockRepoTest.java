@@ -1,6 +1,7 @@
 package com.itananina.weblamp.weblamp.controllers;
 
 import com.itananina.weblamp.weblamp.AbstractSpringBootTest;
+import com.itananina.weblamp.weblamp.configs.SecurityConfig;
 import com.itananina.weblamp.weblamp.entities.Order;
 import com.itananina.weblamp.weblamp.entities.OrderProduct;
 import com.itananina.weblamp.weblamp.entities.Product;
@@ -17,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;

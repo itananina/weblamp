@@ -23,7 +23,7 @@
                     <td th:text = "${p.getPrice()}"></td>
                     <td th:text = "${p.getAmount()}"></td>
                     <td>
-                        <form th:action="@{./{username}/items/{id}(username=${username},id=${p.getId()})}" th:method="DELETE">
+                        <form th:action="@{./items/{id}(id=${p.getId()})}" th:method="DELETE">
                             <button type="submit" class="btn btn-danger">-</button>
                         </form>
                     </td>
@@ -32,10 +32,10 @@
             </table>
 
             <div style="display: inline">
-                <form th:action="@{./{username}/confirm(username=${username})}" style="float: left; margin-right: 1%">
+                <form th:action="@{./confirm}" style="float: left; margin-right: 1%">
                     <button type="submit" class="btn btn-primary" th:disabled="${order.productList.empty}">Оформить заказ</button>
                 </form>
-                <form th:action="@{./{username}/items(username=${username})}" th:method="DELETE" >
+                <form th:action="@{./items}" th:method="DELETE" >
                     <button type="submit" class="btn btn-danger" th:disabled="${order.productList.empty}">Очистить корзину</button>
                 </form>
             </div>

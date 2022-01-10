@@ -2,6 +2,7 @@ package com.itananina.weblamp.weblamp.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.itananina.weblamp.weblamp.AbstractSpringBootTest;
+import com.itananina.weblamp.weblamp.configs.SecurityConfig;
 import com.itananina.weblamp.weblamp.dto.JwtRequest;
 import com.itananina.weblamp.weblamp.entities.User;
 import com.itananina.weblamp.weblamp.exceptions.IncorrectUsernameOrPasswordException;
@@ -10,9 +11,12 @@ import com.itananina.weblamp.weblamp.repositories.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
+import javax.annotation.PostConstruct;
 import java.util.Objects;
 
 

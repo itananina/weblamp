@@ -1,6 +1,7 @@
 package com.itananina.weblamp.weblamp.configs;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,22 +18,34 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final JwtRequestFilter jwtRequestFilter;
 
+    @Value("${jwt.switchOn}")
+    private boolean jwtSwitchOn;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable()
-                .authorizeRequests()
-                .antMatchers("/api/v1/orders/{id:\\d+}").permitAll()
-                .antMatchers("/api/v1/orders/**").authenticated()
-                .anyRequest().permitAll()
-                .and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .headers().frameOptions().disable()
-                .and()
-                .exceptionHandling()
-                .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED));
+        if(jwtSwitchOn) {
+            http.csrf().disable()
+                    .authorizeRequests()
+                    .antMatchers("/api/v1/orders/{id:\\d+}").permitAll()
+                    .antMatchers("/api/v1/orders/**").authenticated()
+                    .anyRequest().permitAll()
+                    .and()
+                    .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                    .and()
+                    .headers().frameOptions().disable()
+                    .and()
+                    .exceptionHandling()
+                    .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED));
 
-        http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class); //кто, перед кем
+            http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class); //кто, перед кем
+        } else {
+            http.authorizeRequests()
+                    .antMatchers("/api/v1/cart/**").authenticated()
+                    .anyRequest().permitAll()
+                    .and()
+                    .formLogin()
+                        .defaultSuccessUrl("/api/v1/cart/");
+        }
     }
 
     @Bean
