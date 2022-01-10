@@ -17,3 +17,9 @@ spring:
     url: jdbc:sqlite:products.db
     username:
     password:
+  thymeleaf:
+    cache: false
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true

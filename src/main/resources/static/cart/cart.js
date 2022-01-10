@@ -1,4 +1,4 @@
-angular.module('weblamp').controller('cartController', function ($scope, $rootScope, $http, $localStorage, $location) {
+angular.module('weblamp').controller('cartController', function ($scope, $rootScope, $http, $localStorage, $location, $window) {
     const contextPath = 'http://localhost:8192/weblamp';
 
     $scope.loadOrder = function () {
