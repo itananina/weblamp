@@ -23,13 +23,13 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler
-    public ResponseEntity<AppError> incorrectUsernameOrPasswordException(IncorrectUsernameOrPasswordException e) {
+    public ResponseEntity<AppError> catchIncorrectUsernameOrPasswordException(IncorrectUsernameOrPasswordException e) {
         log.error(e.getMessage(), e);
         return new ResponseEntity<>(new AppError(HttpStatus.UNAUTHORIZED.value(), e.getMessage()), HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler
-    public ResponseEntity<AppError> usernameNotFoundException(UsernameNotFoundException e) {
+    public ResponseEntity<AppError> catchUsernameNotFoundException(UsernameNotFoundException e) {
         log.error(e.getMessage(), e);
         return new ResponseEntity<>(new AppError(HttpStatus.UNAUTHORIZED.value(), e.getMessage()), HttpStatus.UNAUTHORIZED);
     }
