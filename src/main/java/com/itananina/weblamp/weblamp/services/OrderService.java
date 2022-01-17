@@ -19,7 +19,7 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final ProductService productService;
     private final UserService userService;
-    private final DiscountService discountService;
+    private final DiscountServiceImpl discountService;
 
     @Transactional
     public Order addProduct(String username, Long productId) {

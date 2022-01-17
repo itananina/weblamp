@@ -1,6 +1,6 @@
 package com.itananina.weblamp.weblamp.unit;
 
-import com.itananina.weblamp.weblamp.services.DiscountService;
+import com.itananina.weblamp.weblamp.services.DiscountServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -16,7 +16,7 @@ public class DiscountServiceTest {
 
     @Test
     public void discountDayTodayCheck() {
-        DiscountService discountService = new DiscountService();
+        DiscountServiceImpl discountService = new DiscountServiceImpl();
 
         Calendar today = Calendar.getInstance();
 
@@ -26,7 +26,7 @@ public class DiscountServiceTest {
 
     @Test
     public void discountDayNotTodayCheck() {
-        DiscountService discountService = new DiscountService();
+        DiscountServiceImpl discountService = new DiscountServiceImpl();
 
         Calendar today = Calendar.getInstance();
         today.add(Calendar.DATE, 2);
@@ -37,7 +37,7 @@ public class DiscountServiceTest {
 
     @Test
     public void discountMidnightRecountCheck() {
-        DiscountService discountService = new DiscountService();
+        DiscountServiceImpl discountService = new DiscountServiceImpl();
 
         Calendar today = Calendar.getInstance();
         ReflectionTestUtils.setField(discountService, "discountDaysMap", prepareDiscountDaysMap(today,null));
@@ -51,7 +51,7 @@ public class DiscountServiceTest {
 
     @Test
     public void discountNoRecountCheck() {
-        DiscountService discountService = new DiscountService();
+        DiscountServiceImpl discountService = new DiscountServiceImpl();
 
         Calendar today = Calendar.getInstance();
         ReflectionTestUtils.setField(discountService, "discountDaysMap", prepareDiscountDaysMap(today,null));
@@ -64,7 +64,7 @@ public class DiscountServiceTest {
 
     @Test
     public void discountBadValueCheck() {
-        DiscountService discountService = new DiscountService();
+        DiscountServiceImpl discountService = new DiscountServiceImpl();
 
         Calendar today = Calendar.getInstance();
 
