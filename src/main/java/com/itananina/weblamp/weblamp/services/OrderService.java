@@ -76,7 +76,7 @@ public class OrderService {
         return order;
     }
 
-    public Page<Order> findAllByUserId(String username, int page) {
+    public Page<Order> findAllByUsername(String username, int page) {
         User user = userService.findByUsername(username).orElseThrow(()->new ResourceNotFoundException("User not found by username: "+username));
         return orderRepository.findAllByUserId(user.getId(), PageRequest.of(page-1, 4));
     }

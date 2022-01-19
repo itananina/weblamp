@@ -9,8 +9,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/v1/orders")
@@ -24,7 +22,7 @@ public class OrdersController {
         if (page < 1) {
             page = 1;
         }
-        return orderService.findAllByUserId(principal.getName(), page)
+        return orderService.findAllByUsername(principal.getName(), page)
                 .map(el->converter.orderToConfirmedDto(el));
     }
 

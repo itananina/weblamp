@@ -54,13 +54,6 @@ public class UserService implements UserDetailsService {
         return userRepository.findByUsername(username);
     }
 
-    public Optional<User> findById(Long id) {
-        return userRepository.findById(id);
-    }
-
-    public List<String> getUserList() {
-        return userRepository.findAll().stream().map(u->u.getUsername()).collect(Collectors.toList());
-    }
 
     @Transactional
     public UserDetails createUser(User newUser) throws UserAlreadyExistsException {

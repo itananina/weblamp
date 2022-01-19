@@ -14,19 +14,19 @@ public class DiscountServiceTest {
     @Test
     public void todayIsDiscountDateCheck() {
         DiscountServiceImpl discountService = new DiscountServiceImpl(prepareDiscountDaysMap(LocalDate.now(), 30));
-        Assertions.assertTrue(discountService.test(LocalDate.now()));
+        Assertions.assertEquals(210, discountService.getDiscountedValue(300));
     }
 
     @Test
     public void todayIsNotDiscountDateCheck() {
         DiscountServiceImpl discountService = new DiscountServiceImpl(prepareDiscountDaysMap(LocalDate.now().plusDays(1), 30));
-        Assertions.assertFalse(discountService.test(LocalDate.now()));
+        Assertions.assertEquals(300, discountService.getDiscountedValue(300));
     }
 
     @Test
     public void badDiscountValueCheck() {
         DiscountServiceImpl discountService = new DiscountServiceImpl(prepareDiscountDaysMap(LocalDate.now(),150));
-        Assertions.assertFalse(discountService.test(LocalDate.now()));
+        Assertions.assertEquals(200, discountService.getDiscountedValue(200));
     }
 
     @Test

@@ -8,23 +8,14 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
-import java.util.function.Predicate;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class DiscountServiceImpl implements DiscountService, Predicate<LocalDate> {
+public class DiscountServiceImpl implements DiscountService {
 
     @Value("#{${discount.dates}}")
     private final Map<String,Integer> discountDaysMap;
-
-    //есть ли today в мапе с нормальной скидкой
-    @Override
-    public boolean test(LocalDate today) {
-        return discountDaysMap.entrySet().stream()
-                .anyMatch(el -> el.getKey().equals(today.format(DateTimeFormatter.ofPattern("MM-dd")))
-                        && el.getValue() > 0 && el.getValue() < 100);
-    }
 
     // ЕСЛИ today есть в мапе с нормальной скидкой ТО возвращаем значение со скидкой ИНАЧЕ без изменений
     @Override
