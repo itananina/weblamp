@@ -3,86 +3,47 @@ package com.itananina.weblamp.weblamp.unit;
 import com.itananina.weblamp.weblamp.services.DiscountServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.test.util.ReflectionTestUtils;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 
 public class DiscountServiceTest {
-
     @Test
-    public void discountDayTodayCheck() {
-        DiscountServiceImpl discountService = new DiscountServiceImpl();
-
-        Calendar today = Calendar.getInstance();
-
-        ReflectionTestUtils.setField(discountService, "discountDaysMap", prepareDiscountDaysMap(today,null));
-        Assertions.assertEquals(Optional.of(30),discountService.getDiscountForToday());
+    public void todayIsDiscountDateCheck() {
+        DiscountServiceImpl discountService = new DiscountServiceImpl(prepareDiscountDaysMap(LocalDate.now(), 30));
+        Assertions.assertTrue(discountService.test(LocalDate.now()));
     }
 
     @Test
-    public void discountDayNotTodayCheck() {
-        DiscountServiceImpl discountService = new DiscountServiceImpl();
-
-        Calendar today = Calendar.getInstance();
-        today.add(Calendar.DATE, 2);
-
-        ReflectionTestUtils.setField(discountService, "discountDaysMap", prepareDiscountDaysMap(today,null));
-        Assertions.assertEquals(Optional.empty(),discountService.getDiscountForToday());
+    public void todayIsNotDiscountDateCheck() {
+        DiscountServiceImpl discountService = new DiscountServiceImpl(prepareDiscountDaysMap(LocalDate.now().plusDays(1), 30));
+        Assertions.assertFalse(discountService.test(LocalDate.now()));
     }
 
     @Test
-    public void discountMidnightRecountCheck() {
-        DiscountServiceImpl discountService = new DiscountServiceImpl();
-
-        Calendar today = Calendar.getInstance();
-        ReflectionTestUtils.setField(discountService, "discountDaysMap", prepareDiscountDaysMap(today,null));
-        today.add(Calendar.DATE, -1);
-        ReflectionTestUtils.setField(discountService, "today", today); //today устарел
-        ReflectionTestUtils.setField(discountService, "discountForToday", Optional.of(1));
-
-        discountService.getDiscountForToday();
-        Assertions.assertEquals(Optional.of(30),ReflectionTestUtils.getField(discountService,"discountForToday"));
+    public void badDiscountValueCheck() {
+        DiscountServiceImpl discountService = new DiscountServiceImpl(prepareDiscountDaysMap(LocalDate.now(),150));
+        Assertions.assertFalse(discountService.test(LocalDate.now()));
     }
 
     @Test
-    public void discountNoRecountCheck() {
-        DiscountServiceImpl discountService = new DiscountServiceImpl();
-
-        Calendar today = Calendar.getInstance();
-        ReflectionTestUtils.setField(discountService, "discountDaysMap", prepareDiscountDaysMap(today,null));
-        ReflectionTestUtils.setField(discountService, "today", today); //today = сегодня
-        ReflectionTestUtils.setField(discountService, "discountForToday", Optional.of(1));
-
-        discountService.getDiscountForToday();
-        Assertions.assertEquals(Optional.of(1),ReflectionTestUtils.getField(discountService,"discountForToday"));
+    public void getDiscountedValueCheck() {
+        DiscountServiceImpl discountService = new DiscountServiceImpl(prepareDiscountDaysMap(LocalDate.now(),50));
+        Assertions.assertEquals(100, discountService.getDiscountedValue(200));
     }
 
     @Test
-    public void discountBadValueCheck() {
-        DiscountServiceImpl discountService = new DiscountServiceImpl();
-
-        Calendar today = Calendar.getInstance();
-
-        ReflectionTestUtils.setField(discountService, "discountForToday", Optional.of(1));
-        ReflectionTestUtils.setField(discountService, "discountDaysMap", prepareDiscountDaysMap(today,150));
-
-        discountService.getDiscountForToday();
-        Assertions.assertEquals(Optional.empty(),ReflectionTestUtils.getField(discountService,"discountForToday"));
+    public void getDiscountedValueForDateCheck() {
+        DiscountServiceImpl discountService = new DiscountServiceImpl(prepareDiscountDaysMap(LocalDate.now().plusDays(1),10));
+        Assertions.assertEquals(180, discountService.getDiscountedValue(200, LocalDate.now().plusDays(1)));
     }
 
-    private Map<String, Integer> prepareDiscountDaysMap(Calendar today, Integer discount) {
-        if (discount == null) {
-            discount = 30;
-        }
+    private Map<String, Integer> prepareDiscountDaysMap(LocalDate today, int discount) {
         Map<String, Integer> discountDaysMap = new HashMap<>();
-        SimpleDateFormat sdf = new SimpleDateFormat("MM-dd");
-        String mockDiscountDay = sdf.format(today.getTime());
-        discountDaysMap.put(mockDiscountDay, discount);
+        discountDaysMap.put(today.format(DateTimeFormatter.ofPattern("MM-dd")), discount);
         return discountDaysMap;
     }
 }

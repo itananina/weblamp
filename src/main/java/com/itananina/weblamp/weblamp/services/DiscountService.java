@@ -1,10 +1,15 @@
 package com.itananina.weblamp.weblamp.services;
 
-import java.util.Date;
+import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
+
+@Component
 public interface DiscountService {
-    int getDiscount(Date date);
-//    default int getDiscount() {
-//
-//    }
+
+    int getDiscountedValue(int price, LocalDate date);
+
+    default int getDiscountedValue(int price) {
+        return getDiscountedValue(price, LocalDate.now());
+    }
 }

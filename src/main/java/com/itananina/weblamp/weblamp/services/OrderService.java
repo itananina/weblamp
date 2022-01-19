@@ -32,7 +32,7 @@ public class OrderService {
                     order.getOrderProducts().add(op);
                     return op;
                 });
-        orderedProduct.setPricePerProduct(discountService.getDiscountForToday().map(d -> orderedProduct.getProduct().getPrice()*(100-d)/100).orElse(orderedProduct.getProduct().getPrice())); //актуализирую цену
+        orderedProduct.setPricePerProduct(discountService.getDiscountedValue(orderedProduct.getProduct().getPrice())); //актуализирую цену
         orderedProduct.setAmount(orderedProduct.getAmount()==null ? 1 : orderedProduct.getAmount()+1);
         return order;
     }

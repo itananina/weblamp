@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ProductService {
     private final ProductRepository productRepository;
+    private final DiscountService discountService;
 
     public Product findById(Long id) {
         return productRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Product not found: "+id));
@@ -31,7 +32,14 @@ public class ProductService {
         if(titlePart!=null) {
             spec = spec.and(ProductsSpecifications.titleLike(titlePart));
         }
-        return productRepository.findAll(spec, PageRequest.of(page-1, 4)); //-1 тк для системы с 0, для клиента с 1
+
+        Page<Product> productPage = productRepository.findAll(spec, PageRequest.of(page-1, 4)); //-1 тк для системы с 0, для клиента с 1
+
+        return productPage
+                .map(p ->  {
+                    p.setPrice(discountService.getDiscountedValue(p.getPrice()));
+                    return p;
+                });
     }
 
 }
