@@ -4,6 +4,9 @@ server:
     context-path: /weblamp
     session:
       timeout: 60s
+utils:
+  cart:
+    prefix: SPRING_WEB_
 spring:
   jpa:
     show-sql: true
