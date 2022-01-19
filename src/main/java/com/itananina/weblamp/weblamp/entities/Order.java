@@ -1,5 +1,6 @@
 package com.itananina.weblamp.weblamp.entities;
 
+import com.itananina.weblamp.weblamp.services.dictionaries.OrderStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,7 +22,7 @@ public class Order {
     private Long id;
 
     @Column(name="status")
-    private String status;
+    private OrderStatus status;
 
     @Column(name="total")
     private int total;
@@ -33,7 +34,7 @@ public class Order {
     @OneToMany(mappedBy = "order",cascade=CascadeType.PERSIST, orphanRemoval=true)
     private List<OrderProduct> orderProducts;
 
-    public Order(String status, User user) {
+    public Order(OrderStatus status, User user) {
         this.status = status;
         this.user = user;
     }

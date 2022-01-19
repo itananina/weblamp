@@ -5,6 +5,7 @@ import com.itananina.weblamp.weblamp.entities.Order;
 import com.itananina.weblamp.weblamp.entities.OrderProduct;
 import com.itananina.weblamp.weblamp.entities.Product;
 import com.itananina.weblamp.weblamp.entities.User;
+import com.itananina.weblamp.weblamp.services.dictionaries.OrderStatusMap;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
@@ -32,7 +33,7 @@ public class DtoConverter {
     public OrderDto orderToOrderDto(Order order) {
         return new OrderDto(
                 order.getId(),
-                order.getStatus(),
+                OrderStatusMap.getStatusMap().get(order.getStatus()),
                 order.getOrderProducts().stream()
                     .mapToInt(op->op.getPricePerProduct()*op.getAmount())
                     .sum(),
@@ -45,7 +46,7 @@ public class DtoConverter {
     }
 
     public ConfirmedOrderDto orderToConfirmedDto(Order order) {
-        return new ConfirmedOrderDto(order.getId(),order.getStatus(),order.getTotal(),
+        return new ConfirmedOrderDto(order.getId(),OrderStatusMap.getStatusMap().get(order.getStatus()),order.getTotal(),
                 //из-за этого сыпятся селекты:
                 order.getOrderProducts().stream()
                         .mapToInt(op->op.getAmount())

@@ -8,6 +8,7 @@ import com.itananina.weblamp.weblamp.entities.User;
 import com.itananina.weblamp.weblamp.repositories.OrderRepository;
 import com.itananina.weblamp.weblamp.repositories.UserRepository;
 import com.itananina.weblamp.weblamp.services.UserService;
+import com.itananina.weblamp.weblamp.services.dictionaries.OrderStatus;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +40,7 @@ public class OrderDetailsControllerTest extends AbstractSpringBootTest {
     @PostConstruct //выполняется перед каждым @Test
     public void init() {
         userDetails = userService.loadUserByUsername("autotestuser");
-        mockOrder = new Order("В процессе",findUserByUsername());
+        mockOrder = new Order(OrderStatus.IN_PROCESS,findUserByUsername());
         mockOrder.setId(1l);
         mockOrder.setOrderProducts(new ArrayList<>(Arrays.asList(
                 new OrderProduct(1L,new Product(1l,"Title1",50),mockOrder,100,1),

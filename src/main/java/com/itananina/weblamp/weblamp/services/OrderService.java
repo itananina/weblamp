@@ -5,14 +5,13 @@ import com.itananina.weblamp.weblamp.entities.OrderProduct;
 import com.itananina.weblamp.weblamp.entities.User;
 import com.itananina.weblamp.weblamp.exceptions.ResourceNotFoundException;
 import com.itananina.weblamp.weblamp.repositories.OrderRepository;
+import com.itananina.weblamp.weblamp.services.dictionaries.OrderStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -41,12 +40,8 @@ public class OrderService {
 
     public Order getCurrentOrder(String username) {
         User user = userService.findByUsername(username).orElseThrow(()->new ResourceNotFoundException("User not found by username: "+username));
-        Order order = orderRepository.findByUserIdAndStatus(user.getId(),"В процессе")
-                .orElseGet(()-> {
-                    log.info("reached 5");
-                    return orderRepository.save(new Order("В процессе",user));
-                });
-        return order;
+        return orderRepository.findByUserIdAndStatus(user.getId(), OrderStatus.IN_PROCESS)
+                .orElseGet(()-> orderRepository.save(new Order(OrderStatus.IN_PROCESS,user)));
     }
 
     @Transactional
@@ -74,7 +69,7 @@ public class OrderService {
     @Transactional
     public Order confirmOrder(String username) {
         Order order = getCurrentOrder(username);
-        order.setStatus("Оформлен");
+        order.setStatus(OrderStatus.CONFIRMED);
         order.setTotal(order.getOrderProducts().stream()
                 .mapToInt(op->op.getPricePerProduct()*op.getAmount())
                 .sum());

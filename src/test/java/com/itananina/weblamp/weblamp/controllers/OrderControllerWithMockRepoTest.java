@@ -1,7 +1,6 @@
 package com.itananina.weblamp.weblamp.controllers;
 
 import com.itananina.weblamp.weblamp.AbstractSpringBootTest;
-import com.itananina.weblamp.weblamp.configs.SecurityConfig;
 import com.itananina.weblamp.weblamp.entities.Order;
 import com.itananina.weblamp.weblamp.entities.OrderProduct;
 import com.itananina.weblamp.weblamp.entities.Product;
@@ -11,6 +10,7 @@ import com.itananina.weblamp.weblamp.repositories.OrderRepository;
 import com.itananina.weblamp.weblamp.repositories.UserRepository;
 import com.itananina.weblamp.weblamp.services.JwtTokenUtil;
 import com.itananina.weblamp.weblamp.services.UserService;
+import com.itananina.weblamp.weblamp.services.dictionaries.OrderStatus;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -18,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -49,13 +48,13 @@ public class OrderControllerWithMockRepoTest extends AbstractSpringBootTest {
     public void init() {
         userDetails = userService.loadUserByUsername("autotestuser");
         token = jwtTokenUtil.generateToken(userDetails);
-        mockOrder = new Order("В процессе",findUserByUsername());
+        mockOrder = new Order(OrderStatus.IN_PROCESS,findUserByUsername());
         mockOrder.setId(1l);
         mockOrder.setOrderProducts(new ArrayList<>(Arrays.asList(
                 new OrderProduct(1L,new Product(1l,"Title1",50),mockOrder,100,1),
                 new OrderProduct(2L,new Product(2l,"Title2",100),mockOrder,100,2))));
         Assertions.assertNotNull(token);
-        Mockito.when(mockOrderRepository.findByUserIdAndStatus(findUserByUsername().getId(),"В процессе")).
+        Mockito.when(mockOrderRepository.findByUserIdAndStatus(findUserByUsername().getId(),OrderStatus.IN_PROCESS)).
                 thenReturn(Optional.of(mockOrder));
     }
 
@@ -121,7 +120,7 @@ public class OrderControllerWithMockRepoTest extends AbstractSpringBootTest {
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.status").value("Оформлен"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.status").value("Оформлен")) //тут упадет
                 .andExpect(MockMvcResultMatchers.jsonPath("$.total").value(totalMockValue));
     }
 
