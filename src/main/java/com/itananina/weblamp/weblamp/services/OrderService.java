@@ -7,6 +7,8 @@ import com.itananina.weblamp.weblamp.exceptions.ResourceNotFoundException;
 import com.itananina.weblamp.weblamp.repositories.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -79,9 +81,9 @@ public class OrderService {
         return order;
     }
 
-    public List<Order> findAllByUserId(String username) {
+    public Page<Order> findAllByUserId(String username, int page) {
         User user = userService.findByUsername(username).orElseThrow(()->new ResourceNotFoundException("User not found by username: "+username));
-        return orderRepository.findAllByUserId(user.getId());
+        return orderRepository.findAllByUserId(user.getId(), PageRequest.of(page-1, 4));
     }
 
     public Order findById(Long id) {

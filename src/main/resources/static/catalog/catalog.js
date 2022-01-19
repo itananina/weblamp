@@ -13,7 +13,7 @@ angular.module('weblamp').controller('catalogController', function ($scope, $roo
             }
         }).then(function (response) {
             $scope.ProductList = response.data.content; //.content для page !!!
-            $scope.currentPage = response.data.number;
+            $scope.currentPage = response.data.number+1;
             $scope.isFirstPage = response.data.first;
             $scope.isLastPage = response.data.last;
         });

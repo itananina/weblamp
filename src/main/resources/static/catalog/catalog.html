@@ -22,9 +22,9 @@
         </table>
 
         <p align="center">
-            <button class="btn btn-primary" data-ng-disabled="isFirstPage" ng-click="loadProducts(currentPage)"><</button>
-            <span>{{currentPage+1}}</span>
-            <button class="btn btn-primary" data-ng-disabled="isLastPage" ng-click="loadProducts(currentPage+2)">></button>
+            <button class="btn btn-primary" data-ng-disabled="isFirstPage" ng-click="loadProducts(currentPage-1)"><</button>
+            <span>{{currentPage}}</span>
+            <button class="btn btn-primary" data-ng-disabled="isLastPage" ng-click="loadProducts(currentPage+1)">></button>
         </p>
     </div>
 

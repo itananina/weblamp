@@ -5,6 +5,7 @@ import com.itananina.weblamp.weblamp.dto.ConfirmedOrderDto;
 import com.itananina.weblamp.weblamp.dto.OrderDto;
 import com.itananina.weblamp.weblamp.services.OrderService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -19,10 +20,12 @@ public class OrdersController {
     private final DtoConverter converter;
 
     @GetMapping
-    public List<ConfirmedOrderDto> getOrders(Principal principal) {
-        return orderService.findAllByUserId(principal.getName()).stream()
-                .map(el->converter.orderToConfirmedDto(el))
-                .collect(Collectors.toList());
+    public Page<ConfirmedOrderDto> getOrders(Principal principal, @RequestParam(defaultValue = "1") Integer page) {
+        if (page < 1) {
+            page = 1;
+        }
+        return orderService.findAllByUserId(principal.getName(), page)
+                .map(el->converter.orderToConfirmedDto(el));
     }
 
     @GetMapping("/active")

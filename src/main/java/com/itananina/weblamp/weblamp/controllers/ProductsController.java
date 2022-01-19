@@ -27,7 +27,6 @@ public class ProductsController {
         if (page < 1) {
             page = 1;
         }
-        // конвертируем весь пэйдж, чтобы конвертер брал одну и ту же скидку для всех элементов
         return productConverter.productPageToProductDtoPage(productService.find(page, minPrice, maxPrice, titlePart));
     }
 

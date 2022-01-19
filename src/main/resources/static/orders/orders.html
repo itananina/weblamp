@@ -16,5 +16,10 @@
         </tr>
         </tbody>
     </table>
+    <p align="center">
+        <button class="btn btn-primary" data-ng-disabled="isFirstPage" ng-click="loadConfirmed(currentPage-1)"><</button>
+        <span>{{currentPage}}</span>
+        <button class="btn btn-primary" data-ng-disabled="isLastPage" ng-click="loadConfirmed(currentPage+1)">></button>
+    </p>
 
 </div>
